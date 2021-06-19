@@ -17,4 +17,7 @@ func main() {
 	for _, letter := range name {
 		fmt.Println(string(letter))
 	}
+	a := 2
+	b := &a
+	fmt.Println(*b, &a)
 }
