@@ -13,4 +13,8 @@ func plus(a ...int) int {
 func main() {
 	result := plus(2, 3, 4, 5, 6, 7, 8, 9, 10)
 	fmt.Println(result)
+	name := "console.log(Hello World)"
+	for _, letter := range name {
+		fmt.Println(string(letter))
+	}
 }
