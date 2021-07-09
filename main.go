@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/Ko-GyeongTae/Backend-Nomadcoin-server/blockchain"
+	"log"
+	"net/http"
 )
 
+const port string = ":4000"
+
+func home(rw http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(rw, "Hello from home!")
+}
+
 func main() {
-	chain := blockchain.GetBlockchain()
-	chain.AddBlock("Second Block")
-	chain.AddBlock("Third Block")
-	chain.AddBlock("Fourth Block")
-	for _, block := range chain.AllBlocks() {
-		fmt.Println(block)
-	}
+	http.HandleFunc("/", home)
+	fmt.Printf("Listening on http://localhost%s\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
