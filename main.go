@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Ko-GyeongTae/Backend-Nomadcoin-server/utils"
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/utils"
 )
 
 const port string = ":4000"
