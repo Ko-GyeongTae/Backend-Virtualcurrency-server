@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/blockchain"
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/utils"
 )
 
 const port string = ":4000"
@@ -42,6 +43,11 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 			Description: "Add a Block",
 			Payload:     "data:string",
 		},
+		{
+			URL:         URL("/blocks/{id}"),
+			Method:      "GET",
+			Description: "See a Block",
+		},
 	}
 	fmt.Println(data)
 	rw.Header().Add("Content-Type", "application/json")
@@ -60,8 +66,9 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().AllBlocks())
 	case "POST":
 		var addBlockBody AddBlockBody
-		json.NewDecoder(r.Body).Decode(&addBlockBody)
-		fmt.Println(addBlockBody)
+		utils.HandleErr(json.NewDecoder(r.Body).Decode(&addBlockBody))
+		blockchain.GetBlockchain().AddBlock(addBlockBody.Message)
+		rw.WriteHeader(http.StatusCreated)
 	}
 }
 
