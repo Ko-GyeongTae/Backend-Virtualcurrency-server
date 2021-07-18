@@ -12,7 +12,8 @@ const port string = ":4000"
 type URL string
 
 func (u URL) MarshalText() (text []byte, err error) {
-	return []byte("HELLO"), nil
+	url := fmt.Sprintf("http://localhost%s%s", port, u)
+	return []byte(url), nil
 }
 
 type URLDescription struct {
