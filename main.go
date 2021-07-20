@@ -1,7 +1,11 @@
 package main
 
-import "github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/rest"
+import (
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/explorer"
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/rest"
+)
 
 func main() {
-	rest.Start()
+	explorer.Start(3000)
+	rest.Start(4000)
 }
