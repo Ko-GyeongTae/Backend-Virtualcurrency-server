@@ -5,7 +5,5 @@ import (
 )
 
 func main() {
-	//explorer.Start(4010)
-	//rest.Start(4000)
 	cli.Start()
 }
