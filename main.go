@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/explorer"
-	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/rest"
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/cli"
 )
 
 func main() {
-	go explorer.Start(4010)
-	rest.Start(4000)
+	//explorer.Start(4010)
+	//rest.Start(4000)
+	cli.Start()
 }
