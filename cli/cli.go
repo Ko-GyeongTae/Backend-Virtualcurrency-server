@@ -10,10 +10,11 @@ import (
 )
 
 func usage() {
-	fmt.Printf("Welcome to Neon Coid\n\n")
+	fmt.Printf("Welcome to Neon Coin\n\n")
 	fmt.Printf("Please se the following flags:\n\n")
-	fmt.Printf("-port:		Set the PORT of the server\n")
-	fmt.Printf("-mode: 		Choose between 'html' and 'rest'\n\n")
+	fmt.Printf("-port:			Set the PORT of the server\n")
+	fmt.Printf("-mode: 			Choose between 'html' and 'rest'\n\n")
+	fmt.Printf("-mode all -port:	Run REST API server on -port and Run HTML server on -port + 10\n\n")
 	os.Exit(0)
 }
 
@@ -24,7 +25,7 @@ func Start() {
 	}
 
 	port := flag.Int("port", 4000, "Set port of ther server")
-	mode := flag.String("mode", "rest", "Choose between 'html' and 'rest'")
+	mode := flag.String("mode", "rest", "Choose in 'html', 'rest', 'all'")
 
 	flag.Parse()
 
@@ -33,6 +34,9 @@ func Start() {
 		rest.Start(*port)
 	case "html":
 		explorer.Start(*port)
+	case "all":
+		go rest.Start(*port)
+		explorer.Start(*port + 10)
 	default:
 		usage()
 	}
