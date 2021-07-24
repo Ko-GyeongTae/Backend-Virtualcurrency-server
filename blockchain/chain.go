@@ -2,6 +2,9 @@ package blockchain
 
 import (
 	"sync"
+
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/db"
+	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/utils"
 )
 
 type blockchain struct {
@@ -11,6 +14,10 @@ type blockchain struct {
 
 var b *blockchain
 var once sync.Once
+
+func (b *blockchain) persist() {
+	db.SaveBlockchain(utils.ToBytes(b))
+}
 
 func (b *blockchain) AddBlock(data string) {
 	block := createBlock(data, b.NewestHash, b.Height)
