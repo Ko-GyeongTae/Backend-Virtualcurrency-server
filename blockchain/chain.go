@@ -1,6 +1,8 @@
 package blockchain
 
 import (
+	"bytes"
+	"encoding/gob"
 	"sync"
 
 	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/db"
@@ -14,6 +16,11 @@ type blockchain struct {
 
 var b *blockchain
 var once sync.Once
+
+func (b *blockchain) restore(data []byte) {
+	decoder := gob.NewDecoder((bytes.NewReader(data)))
+	decoder.Decode(b)
+}
 
 func (b *blockchain) persist() {
 	db.SaveBlockchain(utils.ToBytes(b))
@@ -30,7 +37,12 @@ func Blockchain() *blockchain {
 	if b == nil {
 		once.Do(func() {
 			b = &blockchain{"", 0}
-			b.AddBlock("Genesis Block")
+			checkpoint := db.Checkpoint()
+			if checkpoint == nil {
+				b.AddBlock("Genesis Block")
+			} else {
+				b.restore(checkpoint)
+			}
 		})
 	}
 	return b
