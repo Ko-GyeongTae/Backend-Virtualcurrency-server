@@ -59,8 +59,6 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 			Description: "See a Block",
 		},
 	}
-	fmt.Println(data)
-	rw.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(data)
 	/*
 		b, err := json.Marshal(data)
