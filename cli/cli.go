@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/explorer"
 	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/rest"
@@ -15,7 +16,7 @@ func usage() {
 	fmt.Printf("-port:			Set the PORT of the server\n")
 	fmt.Printf("-mode: 			Choose between 'html' and 'rest'\n\n")
 	fmt.Printf("-mode all -port:	Run REST API server on -port and Run HTML server on -port + 10\n\n")
-	os.Exit(0)
+	runtime.Goexit()
 }
 
 func Start() {
