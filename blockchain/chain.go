@@ -27,16 +27,16 @@ func (b *blockchain) restore(data []byte) {
 	utils.FromBytes(b, data)
 }
 
-func persistBlockchain(b *blockchain) {
-	db.SaveBlockchain(utils.ToBytes(b))
-}
-
 func (b *blockchain) AddBlock() {
 	block := createBlock(b.NewestHash, b.Height+1)
 	b.NewestHash = block.Hash
 	b.Height = block.Height
 	b.CurrentDifficulty = block.Difficulty
 	persistBlockchain(b)
+}
+
+func persistBlockchain(b *blockchain) {
+	db.SaveBlockchain(utils.ToBytes(b))
 }
 
 func Blocks(b *blockchain) []*Block {

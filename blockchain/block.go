@@ -20,24 +20,14 @@ type Block struct {
 	Transactions []*Tx  `json:"transactions"`
 }
 
+var ErrNotFound = errors.New("block not found")
+
 func (b *Block) persist() {
 	db.SaveBlock(b.Hash, utils.ToBytes(b))
 }
 
-var ErrNotFound = errors.New("block not found")
-
 func (b *Block) restore(data []byte) {
 	utils.FromBytes(b, data)
-}
-
-func FindBlock(hash string) (*Block, error) {
-	blockBytes := db.Block(hash)
-	if blockBytes == nil {
-		return nil, ErrNotFound
-	}
-	block := &Block{}
-	block.restore(blockBytes)
-	return block, nil
 }
 
 func (b *Block) mine() {
@@ -53,6 +43,16 @@ func (b *Block) mine() {
 			b.Nonce++
 		}
 	}
+}
+
+func FindBlock(hash string) (*Block, error) {
+	blockBytes := db.Block(hash)
+	if blockBytes == nil {
+		return nil, ErrNotFound
+	}
+	block := &Block{}
+	block.restore(blockBytes)
+	return block, nil
 }
 
 func createBlock(prevHash string, height int) *Block {

@@ -11,21 +11,17 @@ const (
 	minerReward int = 50
 )
 
+var Mempool *mempool = &mempool{}
+
 type mempool struct {
 	Txs []*Tx
 }
-
-var Mempool *mempool = &mempool{}
 
 type Tx struct {
 	Id        string   `json:"id"`
 	Timestamp int      `json:"timestamp"`
 	TxIns     []*TxIn  `json:"txIns"`
 	TxOuts    []*TxOut `json:"txOuts"`
-}
-
-func (t *Tx) getId() {
-	t.Id = utils.Hash(t)
 }
 
 type TxIn struct {
@@ -43,6 +39,27 @@ type UTxOut struct {
 	TxID   string
 	Index  int
 	Amount int
+}
+
+func (t *Tx) getId() {
+	t.Id = utils.Hash(t)
+}
+
+func (m *mempool) AddTx(to string, amount int) error {
+	tx, err := makeTx("neon", to, amount)
+	if err != nil {
+		return err
+	}
+	m.Txs = append(m.Txs, tx)
+	return nil
+}
+
+func (m *mempool) TxToConfirm() []*Tx {
+	coinbase := makeCoinbaseTx("neon")
+	txs := m.Txs
+	txs = append(txs, coinbase)
+	m.Txs = nil
+	return txs
 }
 
 func isOnMempool(uTxOut *UTxOut) bool {
@@ -106,21 +123,4 @@ func makeTx(from, to string, amount int) (*Tx, error) {
 	}
 	tx.getId()
 	return tx, nil
-}
-
-func (m *mempool) AddTx(to string, amount int) error {
-	tx, err := makeTx("neon", to, amount)
-	if err != nil {
-		return err
-	}
-	m.Txs = append(m.Txs, tx)
-	return nil
-}
-
-func (m *mempool) TxToConfirm() []*Tx {
-	coinbase := makeCoinbaseTx("neon")
-	txs := m.Txs
-	txs = append(txs, coinbase)
-	m.Txs = nil
-	return txs
 }
