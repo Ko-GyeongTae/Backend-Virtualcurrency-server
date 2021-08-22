@@ -1,12 +1,10 @@
 package wallet
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
 	"crypto/x509"
 	"encoding/hex"
 	"fmt"
+	"math/big"
 
 	"github.com/Ko-GyeongTae/Backend-Virtualcurrency-server/utils"
 )
@@ -18,22 +16,18 @@ const (
 )
 
 func Start() {
-	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-
-	keyAsBytes, err := x509.MarshalECPrivateKey(privateKey)
-	fmt.Printf("privateKey : %x\n", keyAsBytes)
-
-	utils.HandleErr(err)
-	message := "I love it"
-	hashedMessage := utils.Hash(message)
-	fmt.Println("HashedMsg : " + hashedMessage)
-
-	hashAsBytes, err := hex.DecodeString(hashedMessage)
-	utils.HandleErr(err)
-	r, s, err := ecdsa.Sign(rand.Reader, privateKey, hashAsBytes)
+	privByte, err := hex.DecodeString(privateKey)
 	utils.HandleErr(err)
 
-	signature := append(r.Bytes(), s.Bytes()...)
+	privateKey, err := x509.ParseECPrivateKey(privByte)
+	utils.HandleErr(err)
 
-	fmt.Printf("Signature : %x\n", signature)
+	sigBytes, err := hex.DecodeString(signature)
+	rBytes := sigBytes[:len(sigBytes)/2]
+	sBytes := sigBytes[len(sigBytes)/2:]
+
+	var bigR, bigS = big.Int{}, big.Int{}
+	bigR.SetBytes(rBytes)
+	bigS.SetBytes(sBytes)
+	fmt.Println(bigR, bigS)
 }
